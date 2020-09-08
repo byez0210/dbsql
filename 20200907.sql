@@ -154,7 +154,7 @@ java :
 java : java.util,Date
 sql : nsl 포멧
  ==> 툴때문일수도 있음 예측하기 힘듬
- TO_DATE 함수를 이용하여 명확하게 명시
+TO_DATE 함수를 이용하여 명확하게 명시
 TO_DATE('날짜 문자열', '날짜 문자열 형식')
 
 SELECT TO_DATE('2019/12/31','YYYY/MM/DD') LASTDAY, 
