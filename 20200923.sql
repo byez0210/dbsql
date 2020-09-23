@@ -51,7 +51,7 @@ DROP INDEX  idx_dept_test2_n_03;
    empno(=)(1)
 6) deptno,hiredate 컬럼으로 구성된 인덱스가 있을 경우 테이블 엑세스 불필요
 
-CREATE UNIQUE INDEX idx_emp_u_01 ON emp (empno,deptno);
+CREATE UNIQUE INDEX idx_emp_u_01 ON emp (empno);
 CREATE INDEX idx_emp_n_02 ON emp (ename);
 CREATE INDEX idx_emp_n_03 ON emp (deptno, sal, mgr, hiredate);
  
@@ -62,9 +62,58 @@ CREATE INDEX idx_emp_n_03 ON emp (deptno, sal, mgr, hiredate);
 ==> 오라클 입장에서 실행계획을 세우는데 도움이 된다
 
 실습idx4] --과제
-CREATE UNIQUE INDEX idx_emp_u_01 ON emp (empno);
-CREATE INDEX idx_emp_n_02 ON dept (deptno);
+DROP INDEX idx_emp_u_01;
+DROP INDEX idx_dept_n_02;
+DROP INDEX idx_emp_n_03;
 
+CREATE UNIQUE INDEX idx_emp_u_01 ON emp (empno);
+CREATE INDEX idx_dept_n_02 ON dept (deptno, loc);
+CREATE INDEX idx_emp_n_03 ON emp (deptno, sal);
+
+EXPLAIN PLAN FOR 
+SELECT *
+FROM emp
+WHERE  empno = :empno;
+
+SELECT *
+FROM TABLE (dbms_xplan.display);
+
+EXPLAIN PLAN FOR 
+SELECT *
+FROM dept
+WHERE  deptno = :deptno;
+
+SELECT *
+FROM TABLE (dbms_xplan.display);
+
+EXPLAIN PLAN FOR 
+SELECT *
+FROM emp, dept
+WHERE  emp.deptno = dept.deptno
+    AND emp.deptno = :deptno
+    AND emp.deptno LIKE :empno ||'%';
+
+SELECT *
+FROM TABLE (dbms_xplan.display);
+
+EXPLAIN PLAN FOR 
+SELECT *
+FROM emp
+WHERE  sal BETWEEN :st_sal AND :ed_sal
+    AND deptno = :deptno;
+
+SELECT *
+FROM TABLE (dbms_xplan.display);
+
+EXPLAIN PLAN FOR 
+SELECT *
+FROM emp, dept
+WHERE emp.deptno = dept.deptno
+AND emp.deptno = :deptno
+AND dept.loc =:loc;
+
+SELECT *
+FROM TABLE (dbms_xplan.display);
 
 Synonym : 동의어
 오라클 객체에 별칭을 생성한객체
@@ -84,7 +133,7 @@ FROM e;
 
 DCL
 dictionary : 오라클의 객체 정보를 볼 수 있는 view
-dictionary의 졸ㅇ류는  dictionary View를 총해 조회 가능
+dictionary의 종류는  dictionary View를 총해 조회 가능
 SELECT*
 FROM dictionary;
 
@@ -173,3 +222,4 @@ INSERT ALL
          INTO emp_test2 VALUES (eno,enm)
 SELECT 9500 eno, 'brown' enm FROM dual UNION ALL
 SELECT 9998, 'sally' FROM dual;
+
