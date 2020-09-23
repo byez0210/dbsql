@@ -1,0 +1,9 @@
+BYKIM.V_EMP ==> v_emp
+
+SELECT *
+FROM BYKIM.V_EMP;
+
+CREATE SYNONYM v_emp FOR BYKIM.v_emp;
+
+SELECT *
+FROM v_emp;
