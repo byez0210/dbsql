@@ -117,6 +117,15 @@ CREATE TABLE emp_test AS
 SELECT *
 FROM emp;
 
+UPDATE emp_test e SET sal = sal + 200
+WHERE sal < ( SELECT AVG(sal)
+                FROM emp_test
+                WHERE deptno = e.deptno
+                GROUP BY deptno);
+
+SELECT *FROM emp_test;
+SELECT* FROM emp;
+
 달력만들기 : 행을 열로 만들기 - 레포트 쿼리에서 자주 사용하는 형태
 주어진 것 : 년월 (수업시간에는 '202009'문자열을 사용)
 '202009' ==> 30
